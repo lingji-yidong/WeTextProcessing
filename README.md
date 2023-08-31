@@ -2,6 +2,10 @@
 
 ### 0. Brief Introduction
 
+```diff
+- **Must Read Doc** (In Chinese): https://mp.weixin.qq.com/s/q_11lck78qcjylHCi6wVsQ
+```
+
 [WeTextProcessing: Production First & Production Ready Text Processing Toolkit](https://mp.weixin.qq.com/s/q_11lck78qcjylHCi6wVsQ)
 
 #### 0.1 Text Normalization
@@ -19,6 +23,15 @@
 # install
 pip install WeTextProcessing
 ```
+
+Command-usage:
+
+```bash
+wetn --text "2.5平方电线"
+weitn --text "二点五平方电线"
+```
+
+Python usage:
 
 ```py
 # tn usage
@@ -43,8 +56,8 @@ cd WeTextProcessing
 # `overwrite_cache` will rebuild all rules according to
 #   your modifications on tn/chinese/rules/xx.py (itn/chinese/rules/xx.py).
 #   After rebuild, you can find new far files at `$PWD/tn` and `$PWD/itn`.
-python normalize.py --text "2.5平方电线" --overwrite_cache
-python inverse_normalize.py --text "二点五平方电线" --overwrite_cache
+python -m tn --text "2.5平方电线" --overwrite_cache
+python -m itn --text "二点五平方电线" --overwrite_cache
 ```
 
 Once you successfully rebuild your rules, you can deploy them either with your installed pypi packages:

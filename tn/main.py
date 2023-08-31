@@ -1,4 +1,4 @@
-# Copyright (c) 2022 Xingchen Song (sxc19@tsinghua.org.cn)
+# Copyright (c) 2022 Zhendong Peng (pzd17@tsinghua.org.cn)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,36 +14,20 @@
 
 import argparse
 
-# TODO(xcsong): multi-language support
-from itn.chinese.inverse_normalizer import InverseNormalizer
+# TODO(pzd17): multi-language support
+from tn.chinese.normalizer import Normalizer
 
-def str2bool(s, default=False):
-    s = s.lower()
-    if s == 'true':
-        return True
-    elif s == 'false':
-        return False
-    else:
-        return default
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--text', help='input string')
     parser.add_argument('--file', help='input file path')
     parser.add_argument('--overwrite_cache', action='store_true',
-                        help='rebuild *.far')
-    parser.add_argument('--enable_standalone_number', type=str,
-                        default='True',
-                        help='enable standalone number')
-    parser.add_argument('--enable_0_to_9', type=str,
-                        default='True',
-                        help='enable convert number 0 to 9')
+                        help='rebuild *.fst')
     args = parser.parse_args()
 
-    normalizer = InverseNormalizer(
-        cache_dir='itn', overwrite_cache=args.overwrite_cache,
-        enable_standalone_number=str2bool(args.enable_standalone_number),
-        enable_0_to_9=str2bool(args.enable_0_to_9))
+    normalizer = Normalizer(cache_dir='tn',
+                            overwrite_cache=args.overwrite_cache)
 
     if args.text:
         print(normalizer.tag(args.text))

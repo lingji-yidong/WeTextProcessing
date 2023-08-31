@@ -22,7 +22,7 @@ from itn.chinese.rules.measure import Measure
 from itn.chinese.rules.money import Money
 from itn.chinese.rules.whitelist import Whitelist
 from itn.chinese.rules.time import Time
-from itn.chinese.rules.preprocessor import PreProcessor
+from itn.chinese.rules.postprocessor import PostProcessor
 
 from pynini.lib.pynutil import add_weight, delete
 from importlib_resources import files
@@ -30,27 +30,28 @@ from importlib_resources import files
 
 class InverseNormalizer(Processor):
 
-    def __init__(self, cache_dir='itn', overwrite_cache=False,
+    def __init__(self, cache_dir=None, overwrite_cache=False,
                  enable_standalone_number=True,
                  enable_0_to_9=True):
         super().__init__(name='inverse_normalizer', ordertype='itn')
         self.convert_number = enable_standalone_number
         self.enable_0_to_9 = enable_0_to_9
-        self.build_fst('zh_itn', files(cache_dir), overwrite_cache)
+        if cache_dir is None:
+            cache_dir = files("itn")
+        self.build_fst('zh_itn', cache_dir, overwrite_cache)
 
     def build_tagger(self):
         tagger = (add_weight(Date().tagger, 1.02)
                   | add_weight(Whitelist().tagger, 1.01)
                   | add_weight(Fraction().tagger, 1.05)
                   | add_weight(Measure().tagger, 1.05)
-                  | add_weight(Money().tagger, 1.05)
+                  | add_weight(Money().tagger, 1.04)
                   | add_weight(Time().tagger, 1.05)
                   | add_weight(Cardinal(self.convert_number, self.enable_0_to_9).tagger, 1.06)
                   | add_weight(Math().tagger, 1.10)
                   | add_weight(Char().tagger, 100)).optimize()
 
-        processor = PreProcessor(remove_interjections=True).processor
-        tagger = (processor @ tagger).star
+        tagger = tagger.star
         # remove the last space
         self.tagger = tagger @ self.build_rule(delete(' '), '', '[EOS]')
 
@@ -63,6 +64,7 @@ class InverseNormalizer(Processor):
                       | Measure().verbalizer
                       | Money().verbalizer
                       | Time().verbalizer
-                      | Whitelist().verbalizer).optimize().star
+                      | Whitelist().verbalizer).optimize()
+        postprocessor = PostProcessor(remove_interjections=True).processor
 
-        self.verbalizer = verbalizer
+        self.verbalizer = (verbalizer @ postprocessor).star
