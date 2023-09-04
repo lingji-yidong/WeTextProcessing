@@ -41,10 +41,12 @@ class InverseNormalizer(Processor):
         self.build_fst('zh_itn', cache_dir, overwrite_cache)
 
     def build_tagger(self):
+        # Here we can adjust the weight of Measure and Cardinal
+        # to avoid consecutive Cardinal and Measure to be treat as Measure only.
         tagger = (add_weight(Date().tagger, 1.02)
                   | add_weight(Whitelist().tagger, 1.01)
                   | add_weight(Fraction().tagger, 1.05)
-                  | add_weight(Measure().tagger, 1.05)
+                  | add_weight(Measure().tagger, 105)
                   | add_weight(Money().tagger, 1.04)
                   | add_weight(Time().tagger, 1.05)
                   | add_weight(Cardinal(self.convert_number, self.enable_0_to_9).tagger, 1.06)

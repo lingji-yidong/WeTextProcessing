@@ -87,5 +87,6 @@ class Cardinal(Processor):
             else:
                 number_two_plus = (digits + digits.plus) | teen | tens | hundred | thousand | ten_thousand  # noqa
                 cardinal |= number_two_plus
-        tagger = insert('value: "') + cardinal + insert('"')
+        # here we add a space after a cardinal, To fix "四千四千五"
+        tagger = insert('value: "') + cardinal + insert(' "')
         self.tagger = self.add_tokens(tagger)

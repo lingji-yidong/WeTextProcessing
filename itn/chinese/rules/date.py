@@ -45,9 +45,11 @@ class Date(Processor):
         self.tagger = self.add_tokens(date)
 
     def build_verbalizer(self):
-        addsign = insert("/")
+        # addsign = insert("/")
         year = delete('year: "') + self.SIGMA + delete('" ')
         month = delete('month: "') + self.SIGMA + delete('"')
         day = delete(' day: "') + self.SIGMA + delete('"')
-        verbalizer = (year + addsign).ques + month + (addsign + day).ques
+        # verbalizer = (year + addsign).ques + month + (addsign + day).ques
+        # To fix "现在是二零二三年九月四日二十点十六分"
+        verbalizer = (year + insert("年")).ques + month + (insert("月") + day + insert("日")).ques
         self.verbalizer = self.delete_tokens(verbalizer)

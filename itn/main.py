@@ -13,7 +13,10 @@
 # limitations under the License.
 
 import argparse
-
+import sys
+import os 
+# to use local module, you'd better not use the pip installed WeTextPro
+sys.path.append("/mnt/d/work/code/WeTextProcessing")
 # TODO(xcsong): multi-language support
 from itn.chinese.inverse_normalizer import InverseNormalizer
 

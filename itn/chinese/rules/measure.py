@@ -29,7 +29,12 @@ class Measure(Processor):
 
     def build_tagger(self):
         units_en = string_file('itn/chinese/data/measure/units_en.tsv')
-        units_zh = string_file('itn/chinese/data/measure/units_zh.tsv')
+        # To fix "疑是银河落九天"， We can choose to not use units_zh
+        # Chinese Unit don't need convert. We treat number+units_zh as cardinal
+        units_zh = string_file('itn/chinese/data/measure/units_zh.tsv') 
+        
+        # here we choose to use units_zh anyway
+        #units_zh = accep("")
         sign = string_file('itn/chinese/data/number/sign.tsv')    # + -
         units = add_weight(units_en, -1.0) | \
             ((accep('亿') | accep('兆') | accep('万')).ques + units_zh)
