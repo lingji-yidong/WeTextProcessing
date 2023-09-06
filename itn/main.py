@@ -16,7 +16,12 @@ import argparse
 import sys
 import os 
 # to use local module, you'd better not use the pip installed WeTextPro
-sys.path.append("/mnt/d/work/code/WeTextProcessing")
+# sys.path.append("/mnt/d/work/code/WeTextProcessing")
+current_file_path = os.path.abspath(__file__)
+current_folder_path = os.path.dirname(current_file_path)
+parent_folder_path = os.path.dirname(current_folder_path)
+sys.path.append(parent_folder_path)
+
 # TODO(xcsong): multi-language support
 from itn.chinese.inverse_normalizer import InverseNormalizer
 
